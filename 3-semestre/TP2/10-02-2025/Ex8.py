@@ -1,0 +1,5 @@
+n1 = float(input("Digite o primeiro valor"))
+n2 = float(input("Digite o segundo valor"))
+n3 = float(input("Digite o terceiro valor"))
+somaCubo = pow((n1+ n2+ n3),3)
+print(f"O valor da soma dos 3 numeros elevado ao cubo é {somaCubo}")
