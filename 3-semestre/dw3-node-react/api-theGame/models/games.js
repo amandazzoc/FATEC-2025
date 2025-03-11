@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const gameSchema = new mongoose.Schema({
+const gameSchema = new mongoose.Schema({ // cria um modelo para o objeto
   title: String,
   plataform: String,
   year: Number,

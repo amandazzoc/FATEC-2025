@@ -1,38 +1,37 @@
-import mongoose from 'mongoose'
 import express from "express";
-import Game from "./modules/games.js";
+import mongoose from "mongoose";
 const app = express();
 
-//configuracao do express
+import gameRoutes from "./routes/gameRoutes.js";
+
+// Configurações do Express
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use("/", gameRoutes);
 
-//Iniciando a conexão com o banco de dados do MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/api-thegames")
-
-//ROTA PRINCIPAL
+mongoose.connect("mongodb://127.0.0.1:27017/api-thegames");
+// ROTA PRINCIPAL
 app.get("/", (req, res) => {
-  //res.send("API iniciada com sucesso!");
+  //   res.send("API iniciada com sucesso!");
   const games = [
     {
       title: "Game 1",
       year: 2020,
       platform: "PC",
-      price: 20.99,
+      price: 20,
     },
     {
       title: "Game 2",
-      year: 2023,
-      platform: "Mobile",
-      price: 4.5,
+      year: 2024,
+      platform: "Playstation 5",
+      price: 200,
     },
   ];
-  res.json(games); //enviando os dados em json
+  res.json(games);
 });
 
-//iniciar servidor
+// Iniciando o servidor
 const port = 4000;
-//criando variavel para a porta
 app.listen(port, (error) => {
   if (error) {
     console.log(error);
