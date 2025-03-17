@@ -29,6 +29,37 @@ class gameService {
         console.log(error);
     }
   }
+
+  // update jogo
+  async Update(id, title, plataform, year, price){
+    try{
+      const updatedGame = await Game.findByIdAndUpdate(
+        id, 
+        {
+          title, 
+          plataform, 
+          year, 
+          price
+        }, 
+        {
+          new: true
+        }
+      );
+      console.log(`Dados do game de id: ${id} foram atualizados.`);
+      return updatedGame;
+    } catch(error){
+      console.log(error);
+    }
+  }
+
+  async getById(id){
+    try{
+      const game = await Game.findById({_id: id});
+      return game;
+    } catch(error){
+      console.log(error);
+    }
+  }
 }
 
 export default new gameService();
