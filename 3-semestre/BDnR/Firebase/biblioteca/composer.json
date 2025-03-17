@@ -1,0 +1,17 @@
+{
+    "name": "fatec-dsm3/biblioteca",
+    "autoload": {
+        "psr-4": {
+            "FatecDsm3\\Biblioteca\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Amanda Oliveira",
+            "email": "amandaol7b@gmail.com"
+        }
+    ],
+    "require": {
+        "kreait/firebase-php": "^5.26"
+    }
+}

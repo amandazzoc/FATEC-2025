@@ -16,6 +16,7 @@ async function main() {
     // selecionar a coleção "livros"
     const livros = database.collection("livros");
 
+    /*
     // inserindo dados no bd
     await livros.insertMany([
       {
@@ -37,6 +38,21 @@ async function main() {
         genero: "Conto",
       },
     ]);
+    */
+
+    // consultar todos os documentos
+    const todosLivros = await livros.find().toArray()
+    console.log('Livros: ',todosLivros);
+
+    // atualizar um documento
+    // await livros.updateOne(
+    //   {titulo: "O Alienista"}, //Filtro para encontrar registro
+    //   {$set: {ano:1900}} // Valor atualizado
+    // )
+
+    // deletar um documento do bd
+    // await livros.deleteOne({titulo:"Dom Casmurro"})
+
   } finally {
     await client.close();
   }
