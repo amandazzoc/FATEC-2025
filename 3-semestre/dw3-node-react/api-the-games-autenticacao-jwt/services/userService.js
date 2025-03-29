@@ -11,7 +11,7 @@ class userService {
     }
   }
   // Metodo para cadastrar um usuario
-  async create(name, email, password) {
+  async Create(name, email, password) {
     try {
       const newUser = new User({
         name,
