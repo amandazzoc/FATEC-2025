@@ -1,0 +1,172 @@
+// Inicia o Mongo Shell
+> mongosh
+
+// Usa o banco zoo_db
+> use zoo_db
+
+// Insere 5 animais na collection animais
+zoo_db> db.animais.insertMany([{ "nome": "Thor", "especie": "Tigre-de-bengala", "idade": 10, "dieta": "Carnívoro", "habitat": "Floresta Tropical", "vacinado": false }, { "nome": "Luna", "especie": "Lobo-guará", "idade": 5, "dieta": "Onívoro", "habitat": "Cerrado", "vacinado": true }, { "nome": "Zeus", "especie": "Arara-azul", "idade": 3, "dieta": "Frugívoro", "habitat": "Floresta Amazônica", "vacinado": true }, { "nome": "Maya", "especie": "Elefante-africano", "idade": 25, "dieta": "Herbívoro", "habitat": "Savanas", "vacinado": false }, { "nome": "Rex", "especie": "Jacaré-do-pantanal", "idade": 12, "dieta": "Carnívoro", "habitat": "Pantanal", "vacinado": true }])
+
+// Encontra todos os animais carnívoros
+zoo_db> db.animais.find({"dieta": "Carnívoro"})
+[
+  {
+    _id: ObjectId('67e5d11186fd452625893bfd'),
+    nome: 'Thor',
+    especie: 'Tigre-de-bengala',
+    idade: 10,
+    dieta: 'Carnívoro',
+    habitat: 'Floresta Tropical',
+    vacinado: false
+  },
+  {
+    _id: ObjectId('67e5d11186fd452625893c01'),
+    nome: 'Rex',
+    especie: 'Jacaré-do-pantanal',
+    idade: 12,
+    dieta: 'Carnívoro',
+    habitat: 'Pantanal',
+    vacinado: false
+  }
+]
+
+// Encontra todos os animais que tem o seu Habitat como deserto, no caso nada retorna pois não tem nenhum
+zoo_db> db.animais.find({"habitat": "Deserto"})
+
+// Encontra todos os animais que são felinos, no caso eu apenas tinha o tigre e como não tem nenhum campo que especifique o tipo para poder ser filtrado, entao busquei diretamente pela espécie
+zoo_db> db.animais.find({"especie": "Tigre-de-bengala"})
+[
+  {
+    _id: ObjectId('67e5d11186fd452625893bfd'),
+    nome: 'Thor',
+    especie: 'Tigre-de-bengala',
+    idade: 10,
+    dieta: 'Carnívoro',
+    habitat: 'Floresta Tropical',
+    vacinado: false
+  }
+]
+
+// Atualiza o felino, muda o campo "vacinado" para true
+zoo_db> db.animais.updateOne({"especie": "Tigre-de-bengala"},{"$set": {"vacinado": true}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+// Encontra o felino pra termos certeza que a consulta funcionou
+zoo_db> db.animais.find({"especie": "Tigre-de-bengala"})
+[
+  {
+    _id: ObjectId('67e5d11186fd452625893bfd'),
+    nome: 'Thor',
+    especie: 'Tigre-de-bengala',
+    idade: 10,
+    dieta: 'Carnívoro',
+    habitat: 'Floresta Tropical',
+    vacinado: true
+  }
+]
+
+// Deleta todos os animais que tem a idade maior que 15 anos
+zoo_db> db.animais.deleteMany({"idade": {"$gt": 15}})
+{ acknowledged: true, deletedCount: 1 }
+
+// Verifica se a exclusão funcionou corretamente
+zoo_db> db.animais.find()
+[
+  {
+    _id: ObjectId('67e5d11186fd452625893bfd'),
+    nome: 'Thor',
+    especie: 'Tigre-de-bengala',
+    idade: 10,
+    dieta: 'Carnívoro',
+    habitat: 'Floresta Tropical',
+    vacinado: false
+  },
+  {
+    _id: ObjectId('67e5d11186fd452625893bfe'),
+    nome: 'Luna',
+    especie: 'Lobo-guará',
+    idade: 5,
+    dieta: 'Onívoro',
+    habitat: 'Cerrado',
+    vacinado: false
+  },
+  {
+    _id: ObjectId('67e5d11186fd452625893bff'),
+    nome: 'Zeus',
+    especie: 'Arara-azul',
+    idade: 3,
+    dieta: 'Frugívoro',
+    habitat: 'Floresta Amazônica',
+    vacinado: false
+  },
+  {
+    _id: ObjectId('67e5d11186fd452625893c01'),
+    nome: 'Rex',
+    especie: 'Jacaré-do-pantanal',
+    idade: 12,
+    dieta: 'Carnívoro',
+    habitat: 'Pantanal',
+    vacinado: false
+  }
+]
+
+// Atualiza todos os animais adicionando um campo cuidador.
+zoo_db> db.animais.updateMany({}, {$set: {"cuidador": "Amanda"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 4,
+  modifiedCount: 4,
+  upsertedCount: 0
+}
+
+// Encontra todos os animais para confirmar se a consulta funcionou
+zoo_db> db.animais.find()
+[
+  {
+    _id: ObjectId('67e5d11186fd452625893bfd'),
+    nome: 'Thor',
+    especie: 'Tigre-de-bengala',
+    idade: 10,
+    dieta: 'Carnívoro',
+    habitat: 'Floresta Tropical',
+    vacinado: true,
+    cuidador: 'Amanda'
+  },
+  {
+    _id: ObjectId('67e5d11186fd452625893bfe'),
+    nome: 'Luna',
+    especie: 'Lobo-guará',
+    idade: 5,
+    dieta: 'Onívoro',
+    habitat: 'Cerrado',
+    vacinado: false,
+    cuidador: 'Amanda'
+  },
+  {
+    _id: ObjectId('67e5d11186fd452625893bff'),
+    nome: 'Zeus',
+    especie: 'Arara-azul',
+    idade: 3,
+    dieta: 'Frugívoro',
+    habitat: 'Floresta Amazônica',
+    vacinado: false,
+    cuidador: 'Amanda'
+  },
+  {
+    _id: ObjectId('67e5d11186fd452625893c01'),
+    nome: 'Rex',
+    especie: 'Jacaré-do-pantanal',
+    idade: 12,
+    dieta: 'Carnívoro',
+    habitat: 'Pantanal',
+    vacinado: false,
+    cuidador: 'Amanda'
+  }
+]
