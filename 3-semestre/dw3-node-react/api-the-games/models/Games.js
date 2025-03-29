@@ -1,10 +1,16 @@
 import mongoose from "mongoose";
 
+const descriptionSchema = new mongoose.Schema({
+  genre: String,
+  plataform: String,
+  rating: String
+})
+
 const gameSchema = new mongoose.Schema({
   title: String,
-  platform: String,
   year: Number,
   price: Number,
+  description: [descriptionSchema]
 });
 
 // Aqui está sendo criado a coleção games no banco de dados
