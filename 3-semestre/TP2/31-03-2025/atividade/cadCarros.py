@@ -12,6 +12,30 @@ tela.configure(background="#dde")
 tela.geometry('1000x600')
 
 # Cria database
+conn = sqlite3.connect('MyDB.db')
+
+# Criar cursor
+cur = conn.cursor()
+
+# Criar tabela
+cur.execute("CREATE TABLE IF NOT EXISTS pessoas("
+"codigo INT primary key, "
+"nome TEXT, "
+"idade INT,"
+"sexo TEXT,"
+"altura REAL,"
+"peso REAL,"
+"cidade TEXT,"
+"datanasc TEXT,"
+"dataAtual TEXT,"
+"dataCadastro TEXT,"
+"descricao TEXT"
+")")
+
+conn.commit()
+
+# Fecha a conexão
+conn.close()
 
 # Imagem
 pasta_inicial = ''
@@ -85,10 +109,80 @@ txt_data_atual = Entry(tela, width="24").place(x=280, y=130)
 lbl_desc = Label(tela, text="Descrição:").place(x=160, y=160)
 txt_desc = Entry(tela, width="50").place(x=240, y=160)
 
+# Função de inserção
+def insercao():
+    # Conecta ao database
+    conn = sqlite3.connect('MyDB.db')
+
+    cur = conn.cursor()
+
+    # Insere dados
+    cur.execute('INSERT INTO pessoas VALUES(:codigo,'
+    ':nome,'
+    ':idade,'
+    ':sexo,'
+    ':altura,'
+    ':peso,'
+    ':cidade,'
+    ':datanasc,'
+    ':dataatual,'
+    ':datacadastro,'
+    ':descricao)', {
+        'codigo': txt_codigo.get(), 
+        'nome': txt_nome.get(), 
+        'idade': txt_idade.get(), 
+        'sexo': var.get(), 
+        'altura': txt_altura.get(), 
+        'peso': txt_peso.get(), 
+        'cidade': combo_cidade.get(), 
+        'datanasc': txt_data_nasc.get(), 
+        'dataatual': txt_data_atual.get(), 
+        'datacadastro': txt_data_cad.get(), 
+        'descricao': txt_desc.get()
+    })
+
+    # Commit
+    conn.commit()
+
+    # Fecha a conexão
+    conn.close()
+
+    # Limpa os campos
+    txt_codigo.delete(0, END)
+    txt_nome.delete(0, END)
+    txt_idade.delete(0, END)
+    txt_altura.delete(0, END)
+    txt_peso.delete(0, END)
+    txt_data_nasc.delete(0, END)
+    txt_data_atual.delete(0, END)
+    txt_data_cad.delete(0, END)
+    txt_desc.delete(0, END)
+
+# Função de consulta
+def consulta():
+    conn = sqlite3.connect('MyDB.db')
+    cur = conn.cursor()
+
+    cur.execute('SELECT *, oid FROM pessoas')
+
+    # Recupera os registros
+    records = cur.fetchall()
+
+    # Mostra os resultados encontrados
+    print_records = ''
+    for rec in records:
+        print_records += 'Codigo: ' + str(rec[0]) + 'Nome: ' + str(rec[1]) + '\nIdade: ' + str(rec[2]) + 'Sexo: ' + str(rec[3]) + '\nAltura: ' + str(rec[4]) + 'Peso: ' + str(rec[5]) + '\nCidade: ' + str(rec[6]) + 'Data Nascimento: ' + str(rec[7]) + '\nData Atual: ' + str(rec[8]) + 'Data Cadastro: ' + str(rec[9]) + '\nDescrição: ' + str(rec[10])  
+
+    # Cria e posiciona a label para mostrar o resultado
+    Label(tela, text=print_records).place(x=10, y=220)
+
+    conn.commit()
+    conn.close()
+
 # Botões de ação
 ## Botão salvar
 foto_salvar = PhotoImage(file= r"icones\salvar.png")
-btn_salvar = Button(tela, text="Salvar", image=foto_salvar, compound=TOP).place(x=160, y=190)
+btn_salvar = Button(tela, text="Salvar", image=foto_salvar, compound=TOP, command=insercao).place(x=160, y=190)
 
 ## Botão excluir
 foto_excluir = PhotoImage(file= r"icones\excluir.png")
