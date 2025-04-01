@@ -1,0 +1,87 @@
+// Inicia o Mongo Shell
+> mongosh 
+
+// Seleciona o banco de dados "rpg_db"
+> use rpg_db
+
+// Insere múltiplos documentos na coleção "personagens"
+> db.personagens.insertMany([
+    {
+    "nome": "Arya Ventis",
+    "classe": "Mago",
+    "nivel": 15,
+    "habilidades": [
+        "Super-força",
+        "Ler mentes"
+        ],
+    "vida": 100
+        },
+    {
+        "nome": "Thalos Ironfist",
+        "classe": "Guerreiro",
+        "nivel": 18,
+        "habilidades": [
+            "Golpe esmagador",
+            "Resistência aprimorada"
+        ],
+        "vida": 95
+    },
+    {
+        "nome": "Eldrin Swiftarrow",
+        "classe": "Arqueiro",
+        "nivel": 12,
+        "habilidades": [
+            "Tiro certeiro",
+            "Camuflagem"
+        ],
+        "vida": 80
+    },
+    {
+        "nome": "Seraphina Moonshadow",
+        "classe": "Mago",
+        "nivel": 20,
+        "habilidades": [
+            "Bola de fogo",
+            "Teletransporte"
+        ],
+        "vida": 70
+    },
+    {
+        "nome": "Dain Battleborn",
+        "classe": "Guerreiro",
+        "nivel": 7,
+        "habilidades": [
+            "Ataque giratório",
+            "Grito de guerra"
+        ],
+        "vida": 60
+    },
+    {
+        "nome": "Lyra Windrider",
+        "classe": "Arqueiro",
+        "nivel": 5,
+        "habilidades": [
+            "Disparo duplo",
+            "Esquiva ágil"
+        ],
+        "vida": 50
+    }
+])
+
+// Exibe todos os documentos da coleção "personagens" (verificação)
+> db.personagens.find()
+
+// Busca todos os personagens com nível maior que 10
+> db.personagens.find({"nivel": {"$gt":10}})
+
+// Busca todos os personagens da classe "Guerreiro"
+> db.personagens.find({"classe": "Guerreiro"})
+
+// Atualiza o campo "vida" de todos os personagens para 200
+> db.personagens.updateMany({}, {"$set" : {"vida": 200}})
+
+// Exibe todos os documentos da coleção "personagens" após a atualização (verificação)
+> db.personagens.find()
+
+// Remove todos os personagens com "vida" menor que 30
+> db.personagens.deleteMany({"vida": {"$lt": 30}})

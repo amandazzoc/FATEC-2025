@@ -1,0 +1,104 @@
+// Inicia o Mongo Shell
+> mongosh
+
+// Seleciona o banco de dados "space_db"
+> use space_db
+
+// Insere múltiplos documentos na coleção "naves"
+> db.naves.insertMany([
+    {
+        "nome": "Estrela Cadente", 
+        "tipo": "Exploração", 
+        "capacidadeTripulantes": 5, 
+        "emMissao": true
+    }, 
+    {
+        "nome": "Colossus", 
+        "tipo": "Combate", 
+        "capacidadeTripulantes": 2, 
+        "emMissao": false
+    },
+    {
+        "nome": "Fênix", 
+        "tipo": "Transporte", 
+        "capacidadeTripulantes": 4, 
+        "emMissao": true
+    },
+    {
+        "nome": "Titan", 
+        "tipo": "Carga", 
+        "capacidadeTripulantes": 10, 
+        "emMissao": false
+    },
+    {
+        "nome": "Aurora", 
+        "tipo": "Combate", 
+        "capacidadeTripulantes": 6, 
+        "emMissao": true
+    },
+    {
+        "nome": "Vanguard", 
+        "tipo": "Exploração", 
+        "capacidadeTripulantes": 8, 
+        "emMissao": false
+    },
+    {
+        "nome": "Nebulosa", 
+        "tipo": "Carga", 
+        "capacidadeTripulantes": 3, 
+        "emMissao": true
+    }
+])
+
+// Exibe todos os documentos da coleção "naves" (verificação)
+> db.naves.find()
+
+// Filtra e exibe as naves que estão em missão (emMissao: true)
+> db.naves.find({"emMissao": true})
+
+// Filtra e exibe as naves com capacidade de tripulantes maior que 5
+> db.naves.find({"capacidadeTripulantes": {"$gt": 5}})
+
+// Remove as naves com capacidade de tripulantes menor que 3
+> db.naves.deleteMany({"capacidadeTripulantes": {"$lt":3}})
+
+// Insere múltiplos documentos na coleção "tripulantes"
+> db.tripulantes.insertMany([{
+    "nome": "Edgar", 
+    "nave" : ObjectId("67e847a71259e10bb855b866")
+},
+{
+    "nome": "Amanda",
+    "nave": ObjectId("67e847a71259e10bb855b868")
+},
+{
+    "nome": "Harry",
+    "nave": ObjectId("67e847a71259e10bb855b869")
+},
+{
+    "nome": "Will",
+    "nave": ObjectId("67e847a71259e10bb855b86a")
+},
+{
+    "nome": "Camila",
+    "nave": ObjectId("67e847a71259e10bb855b86b")
+},
+{
+    "nome": "Maria",
+    "nave": ObjectId("67e847a71259e10bb855b86c")
+}])
+
+// Exibe todos os documentos da coleção "tripulantes" (verificação)
+> db.tripulantes.find()
+ 
+// Realiza um "lookup" para unir os dados das coleções "tripulantes" e "naves" (verificação)
+> db.tripulantes.aggregate([
+    {
+        $lookup: {
+            from: "naves",
+            localField: "nave",
+            foreignField: "_id",
+            as: "detalhesNaves"
+        }
+    }
+]);

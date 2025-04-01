@@ -9,7 +9,7 @@ const createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body; // pega os parametros do corpo da requisição
     // implementar aqui a função de hash de senha
-    await userService.create(name, email, password); // chama a função de cadastro de usuário
+    await userService.Create(name, email, password); // chama a função de cadastro de usuário
     res.sendStatus(201); // 201 (CREATED)
   } catch (error) {
     console.log(error);
