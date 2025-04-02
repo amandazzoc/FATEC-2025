@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import filedialog
+from tkinter import messagebox
 from tkinter.ttk import Combobox
 from PIL import Image, ImageTk 
 import sqlite3
@@ -195,7 +196,46 @@ def delete():
     conn = sqlite3.connect('MyDB.db')
     cur = conn.cursor()
 
-    cur.execute('DELETE from pessoas WHERE oid')
+    cur.execute('DELETE from pessoas WHERE oid=' + txt_codigo.get())
+
+    conn.commit()
+    conn.close()
+    messagebox.showinfo("Excluindo...", "Registro excluído com sucesso!")
+
+# Função de alteração
+def update():
+
+    conn = sqlite3.connect('MyDB.db')
+    cur = conn.cursor()
+    record_id = txt_codigo.get()
+
+    cur.execute("""UPDATE pessoas SET
+                nome = :nome,  
+                idade = :idade,
+                sexo = :sexo,
+                altura = :altura,
+                peso = :peso,
+                cidade = :cidade,
+                datanasc = :datanasc,
+                dataatual = :dataatual,
+                datacadastro = :datacadastro,
+                descricao = :descricao
+                WHERE oid = :oid""",
+                {
+                    'nome': txt_nome.get(),
+                    'idade': txt_idade.get(),
+                    'sexo': var.get(),
+                    'altura': txt_altura.get(),
+                    'peso': txt_peso.get(),
+                    'cidade': combo_cidade.get(),
+                    'datanasc': txt_data_nasc.get(),
+                    'dataatual': txt_data_atual.get(),
+                    'datacadastro': txt_data_cad.get(),
+                    'descricao': txt_desc.get(),
+                    'oid': record_id})     
+
+    conn.commit()
+    conn.close()
 
 # Botões de ação
 ## Botão salvar
@@ -204,11 +244,11 @@ btn_salvar = Button(tela, text="Salvar", image=foto_salvar, compound=TOP, comman
 
 ## Botão excluir
 foto_excluir = PhotoImage(file= r"icones\excluir.png")
-btn_excluir = Button(tela, text="Excluir", image=foto_excluir, compound=TOP).place(x=220, y=190)
+btn_excluir = Button(tela, text="Excluir", image=foto_excluir, compound=TOP, command=delete).place(x=220, y=190)
 
 ## Botão alterar
 foto_alterar = PhotoImage(file= r"icones\alterar.png")
-btn_alterar = Button(tela, text="Alterar", image=foto_alterar, compound=TOP).place(x=280, y=190)
+btn_alterar = Button(tela, text="Alterar", image=foto_alterar, compound=TOP, command=update).place(x=280, y=190)
 
 ## Botão consultar
 foto_consultar = PhotoImage(file= r"icones\consultar.png")
@@ -217,8 +257,5 @@ btn_consultar = Button(tela, text="Consultar", image=foto_consultar, compound=TO
 ## Botão sair
 foto_sair = PhotoImage(file= r"icones\sair.png")
 btn_sair = Button(tela, text="Sair", image=foto_sair, compound=RIGHT, command=tela.quit, width="100").place(x=700, y=200)
-
-
-
 
 tela.mainloop()
