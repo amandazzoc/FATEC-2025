@@ -60,31 +60,38 @@ btn_escolher.place(x=10, y=160)
 
 # Campo código
 lbl_codigo = Label(tela, text="Código:").place(x=160, y=10)
-txt_codigo = Entry(tela).place(x=220, y=10)
+txt_codigo = Entry(tela)
+txt_codigo.place(x=220, y=10)
 
 # Campo nome
 lbl_nome = Label(tela, text="Nome:").place(x=160, y=40)
-txt_nome = Entry(tela, width="60").place(x=220, y=40)
+txt_nome = Entry(tela, width="60")
+txt_nome.place(x=220, y=40)
 
 # Campo idade
 lbl_idade = Label(tela, text="Idade:").place(x=600, y=40)
-txt_idade = Entry(tela).place(x=655, y=40)
+txt_idade = Entry(tela)
+txt_idade.place(x=655, y=40)
 
 # Campo sexo 
 lbl_sexo = Label(tela, text="Sexo:").place(x=160, y=70)
 var = StringVar()
 var.set("m")
 
-rdb_button_m = Radiobutton(tela, text="M", variable=var, value="m").place(x=220, y=70)
-rdb_button_f = Radiobutton(tela, text="F", variable=var, value="f").place(x=270, y=70)
+rdb_button_m = Radiobutton(tela, text="M", variable=var, value="m")
+rdb_button_m.place(x=220, y=70)
+rdb_button_f = Radiobutton(tela, text="F", variable=var, value="f")
+rdb_button_f.place(x=270, y=70)
 
 # Campo altura
 lbl_altura = Label(tela, text="Altura:").place(x=320, y=70)
-txt_altura = Entry(tela, width="10").place(x=365, y=70)
+txt_altura = Entry(tela, width="10")
+txt_altura.place(x=365, y=70)
 
 # Campo peso
 lbl_peso = Label(tela, text="Peso:").place(x=450, y=70)
-txt_peso = Entry(tela, width="13").place(x=500, y=70)
+txt_peso = Entry(tela, width="13")
+txt_peso.place(x=500, y=70)
 
 # Campo cidade
 lbl_cidade = Label(tela, text="Cidade:").place(x=600, y=70)
@@ -95,19 +102,23 @@ combo_cidade.place(x=655, y=70)
 
 # Campo data de nascimento
 lbl_data_nasc = Label(tela, text="Data Nascimento:").place(x=160, y=100)
-txt_data_nasc = Entry(tela, width="24").place(x=280, y=100)
+txt_data_nasc = Entry(tela, width="24")
+txt_data_nasc.place(x=280, y=100)
 
 # Campo data de cadastro
 lbl_data_cad =Label(tela, text="Data Cadastro").place(x=450, y=100)
-txt_data_cad = Entry(tela).place(x=550, y=100)
+txt_data_cad = Entry(tela)
+txt_data_cad.place(x=550, y=100)
 
 # Campo data de atualização
 lbl_data_atual = Label(tela, text="Data Atualização").place(x=160, y=130)
-txt_data_atual = Entry(tela, width="24").place(x=280, y=130)
+txt_data_atual = Entry(tela, width="24")
+txt_data_atual.place(x=280, y=130)
 
 # Campo descrição
 lbl_desc = Label(tela, text="Descrição:").place(x=160, y=160)
-txt_desc = Entry(tela, width="50").place(x=240, y=160)
+txt_desc = Entry(tela, width="50")
+txt_desc.place(x=240, y=160)
 
 # Função de inserção
 def insercao():
@@ -171,13 +182,20 @@ def consulta():
     # Mostra os resultados encontrados
     print_records = ''
     for rec in records:
-        print_records += 'Codigo: ' + str(rec[0]) + 'Nome: ' + str(rec[1]) + '\nIdade: ' + str(rec[2]) + 'Sexo: ' + str(rec[3]) + '\nAltura: ' + str(rec[4]) + 'Peso: ' + str(rec[5]) + '\nCidade: ' + str(rec[6]) + 'Data Nascimento: ' + str(rec[7]) + '\nData Atual: ' + str(rec[8]) + 'Data Cadastro: ' + str(rec[9]) + '\nDescrição: ' + str(rec[10])  
+        print_records += 'Codigo: ' + str(rec[0]) + ' Nome: ' + str(rec[1]) + '\nIdade: ' + str(rec[2]) + ' Sexo: ' + str(rec[3]) + '\nAltura: ' + str(rec[4]) + ' Peso: ' + str(rec[5]) + '\nCidade: ' + str(rec[6]) + ' Data Nascimento: ' + str(rec[7]) + '\nData Atual: ' + str(rec[8]) + ' Data Cadastro: ' + str(rec[9]) + '\nDescrição: ' + str(rec[10])  
 
     # Cria e posiciona a label para mostrar o resultado
-    Label(tela, text=print_records).place(x=10, y=220)
+    Label(tela, text=print_records).place(x=10, y=270)
 
     conn.commit()
     conn.close()
+
+# Função de exclusão
+def delete():
+    conn = sqlite3.connect('MyDB.db')
+    cur = conn.cursor()
+
+    cur.execute('DELETE from pessoas WHERE oid')
 
 # Botões de ação
 ## Botão salvar
@@ -194,7 +212,7 @@ btn_alterar = Button(tela, text="Alterar", image=foto_alterar, compound=TOP).pla
 
 ## Botão consultar
 foto_consultar = PhotoImage(file= r"icones\consultar.png")
-btn_consultar = Button(tela, text="Consultar", image=foto_consultar, compound=TOP).place(x=340, y=190)
+btn_consultar = Button(tela, text="Consultar", image=foto_consultar, compound=TOP, command=consulta).place(x=340, y=190)
 
 ## Botão sair
 foto_sair = PhotoImage(file= r"icones\sair.png")
