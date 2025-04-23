@@ -1,0 +1,24 @@
+db.clientes.insertMany([{nome: "Ana", cidade: "São Paulo", idade: 25}, {nome: "João", cidade: "Rio de Janeiro", idade: 30}, {nome: "Carlos", cidade: "São Paulo", idade: 35}, {nome: "Mariana", cidade: "Belo Horizonte", idade: 28}, {nome: "Beatriz", cidade: "Curitiba", idade: 41}])
+
+db.clientes.find({cidade: "São Paulo"})
+
+db.clientes.find({idade:{$gt: 30}}, {nome:1, _id: 0})
+
+techcafe> db.clientes.find({}, {nome: 1, _id: 0}).sort({nome: 1})
+[
+  { nome: 'Ana' },
+  { nome: 'Beatriz' },
+  { nome: 'Carlos' },
+  { nome: 'João' },
+  { nome: 'Mariana' }
+]
+techcafe> db.clientes.find({}, {nome: 1, _id: 0}).sort({nome: -1})
+[
+  { nome: 'Mariana' },
+  { nome: 'João' },
+  { nome: 'Carlos' },
+  { nome: 'Beatriz' },
+  { nome: 'Ana' }
+]
+
+db.pedidos.aggregate([{$lookup:{from: "clientes", localField:"id_cliente", foreignField:"_id", as:"Cliente"}},{$unwind: "$Cliente"}, {$project: {_id:0, nome:"$Cliente.nome", valor:1, data_pedido:1}}])
