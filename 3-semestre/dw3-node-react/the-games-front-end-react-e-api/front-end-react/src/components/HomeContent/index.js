@@ -5,9 +5,9 @@ import { useState, useEffect } from "react";
 
 const HomeContent = () => {
   // Estado para armazenar os jogos
-  const [games, setGames] = useState([])
+  const [games, setGames] = useState([]);
   // Estado para o loading
-  const [loading, setLoading] = useState(true);	
+  const [loading, setLoading] = useState(true);
 
   const fetchGames = async () => {
     try {
@@ -18,6 +18,19 @@ const HomeContent = () => {
       console.log(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Função para deletar um jogo
+  const handleDeleteGame = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:4000/games/${id}`);
+      if (response.status === 204) {
+        alert("Jogo deletado com sucesso!");
+      }
+      setGames(games.filter(game => game._id !== id)) // Atualiza a lista de jogo, deixa na lista apenas os jogos que tiverem o id diferente do ID deletado
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -36,7 +49,7 @@ const HomeContent = () => {
             <h2>Lista de jogos</h2>
           </div>
           {/* LOADING */}
-          <Loading loading={loading}/>
+          <Loading loading={loading} />
 
           <div className={styles.games} id={styles.games}>
             {/* Lista de jogos irá aqui */}
@@ -47,7 +60,9 @@ const HomeContent = () => {
                 </div>
                 <div className={styles.gameInfo}>
                   <h3>{game.title}</h3>
-
+                  <li>Plataforma: {game.descriptions.platform}</li>
+                  <li>Gênero: {game.descriptions.genre}</li>
+                  <li>Classificação: {game.descriptions.rating}</li>
                   <li>Ano: {game.year}</li>
                   <li>
                     Preço:{" "}
@@ -56,6 +71,19 @@ const HomeContent = () => {
                       currency: "BRL",
                     })}
                   </li>
+                  <button
+                    className={styles.btnDel}
+                    onClick={() => {
+                      const confirmed = window.confirm(
+                        "Deseja mesmo excluir o jogo?"
+                      );
+                      if (confirmed) {
+                        handleDeleteGame(game._id);
+                      }
+                    }}
+                  >
+                    Deletar
+                  </button>
                 </div>
               </ul>
             ))}
