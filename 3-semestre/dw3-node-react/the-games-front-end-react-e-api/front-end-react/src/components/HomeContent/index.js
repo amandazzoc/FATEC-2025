@@ -1,7 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 import styles from "@/components/HomeContent/HomeContent.module.css";
 import Loading from "../Loading";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 const HomeContent = () => {
   // Estado para armazenar os jogos
