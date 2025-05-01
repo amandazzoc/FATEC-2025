@@ -1,45 +1,53 @@
-/* eslint-disable @next/next/no-img-element */
+import { useState, useEffect } from "react";
+import axios from "axios";
 import styles from "@/components/HomeContent/HomeContent.module.css";
 import Loading from "../Loading";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import Image from "next/image";
+import EditContent from "../EditContent";
 
 const HomeContent = () => {
-  // Estado para armazenar os jogos
   const [games, setGames] = useState([]);
-  // Estado para o loading
   const [loading, setLoading] = useState(true);
+  const [selectedGame, setSelectedGame] = useState(null);
 
-  const fetchGames = async () => {
-    try {
-      const response = await axios.get("http://localhost:4000/games");
-      const data = response.data.games;
-      setGames(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Função para deletar um jogo
-  const handleDeleteGame = async (id) => {
-    try {
-      const response = await axios.delete(`http://localhost:4000/games/${id}`);
-      if (response.status === 204) {
-        alert("Jogo deletado com sucesso!");
-      }
-      setGames(games.filter(game => game._id !== id)) // Atualiza a lista de jogo, deixa na lista apenas os jogos que tiverem o id diferente do ID deletado
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // Efeito colateral para buscar os jogos
   useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/games");
+        setGames(response.data.games);
+        // console.log(response.data.games);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchGames();
   }, []);
+
+  // Função para DELETAR um jogo
+  const deleteGame = async (gameId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:4000/games/${gameId}`
+      );
+      if (response.status === 204) {
+        alert("O jogo foi excluído com sucesso.");
+        setGames(games.filter((game) => game._id !== gameId));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Função para ABRIR O MODAL de edição com os dados do jogo
+  const openEditModal = (game) => {
+    setSelectedGame(game);
+  };
+
+  // Função para FECHAR O MODAL de edição
+  const closeEditModal = () => {
+    setSelectedGame(null);
+  };
 
   return (
     <>
@@ -50,9 +58,7 @@ const HomeContent = () => {
           <div className={styles.title}>
             <h2>Lista de jogos</h2>
           </div>
-          {/* LOADING */}
           <Loading loading={loading} />
-
           <div className={styles.games} id={styles.games}>
             {/* Lista de jogos irá aqui */}
             {games.map((game) => (
@@ -67,12 +73,13 @@ const HomeContent = () => {
                   <li>Classificação: {game.descriptions.rating}</li>
                   <li>Ano: {game.year}</li>
                   <li>
-                    Preço:{" "}
+                    Preço:
                     {game.price.toLocaleString("pt-br", {
                       style: "currency",
                       currency: "BRL",
                     })}
                   </li>
+                  {/* Botão de deletar */}
                   <button
                     className={styles.btnDel}
                     onClick={() => {
@@ -80,17 +87,26 @@ const HomeContent = () => {
                         "Deseja mesmo excluir o jogo?"
                       );
                       if (confirmed) {
-                        handleDeleteGame(game._id);
+                        deleteGame(game._id);
                       }
                     }}
                   >
                     Deletar
+                  </button>
+
+                  {/* Botão de editar */}
+                  <button
+                    className={styles.btnEdit}
+                    onClick={() => openEditModal(game)}
+                  >
+                    Editar
                   </button>
                 </div>
               </ul>
             ))}
           </div>
         </div>
+        {selectedGame && <EditContent onClose={closeEditModal} />}
       </div>
     </>
   );
