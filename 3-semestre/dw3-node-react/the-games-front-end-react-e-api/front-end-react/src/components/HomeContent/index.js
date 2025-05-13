@@ -49,6 +49,12 @@ const HomeContent = () => {
     setSelectedGame(null);
   };
 
+  // Função para atualizar o jogo editado na lista
+  const handleUpdate = (updatedGame) => {
+    setGames((game) => (game._id === updatedGame._id ? update : game))
+    closeEditModal();
+  }
+
   return (
     <>
       <div className={styles.homeContent}>
@@ -106,7 +112,7 @@ const HomeContent = () => {
             ))}
           </div>
         </div>
-        {selectedGame && <EditContent onClose={closeEditModal} />}
+        {selectedGame && <EditContent onClose={closeEditModal} handleUpdate={handleUpdate} />}
       </div>
     </>
   );

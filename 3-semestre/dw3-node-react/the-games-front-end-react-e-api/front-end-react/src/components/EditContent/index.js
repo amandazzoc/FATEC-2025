@@ -1,7 +1,8 @@
 import styles from "@/components/EditContent/EditContent.module.css";
 import { useEffect } from "react";
+import axios from "axios"
 
-const EditContent = ({ onClose }) => {
+const EditContent = ({ onClose, game, handleUpdate }) => {
   // Criando os estados para as informações do jogo
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
@@ -37,10 +38,10 @@ const EditContent = ({ onClose }) => {
       },
     }
     try {
-      const response = await axios.put(`http://localhost:4000/games/${id}`)
+      const response = await axios.put(`http://localhost:4000/games/${id}`, updatedGame)
       if(response.status === 200){
         alert("Jogo editado com sucesso!")
-        router.push("/home")
+        handleUpdate(response.data.game)
       }
     } catch(error) {
       console.error(error);
@@ -61,7 +62,7 @@ const EditContent = ({ onClose }) => {
           <div className="title">
             <h2>Editar jogo</h2>
           </div>
-          <form id="editForm">
+          <form id="editForm" onSubmit={handleSubmit}>
             <input type="hidden" name="id" />
             <input
               type="text"
@@ -70,6 +71,7 @@ const EditContent = ({ onClose }) => {
               className="inputPrimary"
               required
               value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
             <input
               type="text"
@@ -78,6 +80,7 @@ const EditContent = ({ onClose }) => {
               className="inputPrimary"
               required
               value={platform}
+              onChange={(e) => setPlatform(e.target.value)}
             />
             <input
               type="text"
@@ -86,6 +89,7 @@ const EditContent = ({ onClose }) => {
               className="inputPrimary"
               required
               value={genre}
+              onChange={(e) => setGenre(e.target.value)}
             />
             <input
               type="text"
@@ -94,6 +98,7 @@ const EditContent = ({ onClose }) => {
               className="inputPrimary"
               required
               value={rating}
+              onChange={(e) => setRating(e.target.value)}
             />
             <input
               type="number"
@@ -102,6 +107,7 @@ const EditContent = ({ onClose }) => {
               className="inputPrimary"
               required
               value={year}
+              onChange={(e) => setYear(e.target.value)}
             />
             <input
               type="text"
@@ -110,6 +116,7 @@ const EditContent = ({ onClose }) => {
               className="inputPrimary"
               required
               value={price}
+              onChange={(e) => setPrice(e.target.value)}
             />
             <input type="submit" value="Alterar" className="btnPrimary" />
           </form>
