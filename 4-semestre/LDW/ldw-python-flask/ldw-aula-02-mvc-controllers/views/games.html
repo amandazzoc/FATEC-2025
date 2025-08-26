@@ -1,37 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Essa é a página de games</h1>
+    <hr>
+    <h3>Jogo em destaque:</h3>
+    <ul>
+        <li>Título: <strong>{{title}}</strong></li>
+        <li>Ano: <strong>{{year}}</strong></li>
+        <li>Categoria: <strong>{{category}}</strong></li>
+    </ul>
+    <p>O jogo {{title}} tem {{2025-year}} anos</p>
+    <h3>Top jogadores:</h3>
+    <ol>
+        {% for player in players %}
+            <li>{{player}}</li>
+        {% endfor %}
+    </ol>
+    <h3>Console mais bem avaliado:</h3>
 
-<h1>Essa é a página de games</h1>
-<hr>
-<h3>Jogo em destaque:</h3>
-<ul>
-    <li>Título: <strong>{{title}}</strong></li>
-    <li>Ano: <strong>{{year}}</strong></li>
-    <li>Categoria: <strong>{{category}}</strong></li>
-</ul>
-<p>O jogo {{title}} tem {{2025-year}} anos</p>
-<h3>Top jogadores:</h3>
-<ol>
-    {% for player in players %}
-        <li>{{player}}</li>
+    {% for key, value in console.items() %}
+    {{key}}: <strong>{{value}}</strong><br>
     {% endfor %}
-</ol>
-<h3>Console mais bem avaliado:</h3>
 
-{% for key, value in console.items() %}
-{{key}}: <strong>{{value}}</strong><br>
-{% endfor %}
+    <h3>Está sendo jogado por:</h3>
+    <ol>
+        {% for player in players %}
+            <li>{{player}}</li>
+        {% endfor %}
+    </ol>
 
-<h3>Está sendo jogado por:</h3>
-<ol>
-    {% for player in players %}
-        <li>{{player}}</li>
-    {% endfor %}
-</ol>
+    <hr>
 
-<hr>
-
-<!-- Formulário para enviar o nome do jogador para a rota 'games' -->
-<form action="{{ url_for('games') }}" method="POST">
-    <label for="player">Jogador:</label>
-    <input type="text" id="player" name="player" placeholder="Digite o nome do jogador">
-    <button type="submit">Enviar</button>
-</form>
+    <!-- Formulário para enviar o nome do jogador para a rota 'games' -->
+    <form action="{{ url_for('games') }}" method="POST">
+        <label for="player">Jogador:</label>
+        <input type="text" id="player" name="player" placeholder="Digite o nome do jogador">
+        <button type="submit">Enviar</button>
+    </form>
+{% endblock content %}
