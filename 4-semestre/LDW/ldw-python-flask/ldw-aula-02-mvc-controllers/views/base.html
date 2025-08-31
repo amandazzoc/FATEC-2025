@@ -1,19 +1,24 @@
 <!DOCTYPE html>
-<html lang="ept-brn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Games</title>
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
     <header>
-        <h1 style="text-align: center">The games</h1>
+      <h1 style="text-align: center" class="game-title">The games</h1>
     </header>
-    <hr>
+    <hr />
     {% block content %}
+    <!-- Aqui irá o conteúdo das outras páginas -->
     {% endblock %}
     <footer>
-        <p>Todos os direitos resevados &reg;</p>
+      <p>Todos os direitos resevados &reg;</p>
     </footer>
-</body>
+  </body>
 </html>

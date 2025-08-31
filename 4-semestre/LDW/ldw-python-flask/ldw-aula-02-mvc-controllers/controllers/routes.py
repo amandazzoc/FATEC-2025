@@ -1,54 +1,47 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
-# criando instância do flask
-app = Flask(__name__, template_folder='views') # __name__ representa o nome da aplicação
-
-# app.run() padrão
-# app.run(host='localhost', port=5000, debug=True) mudar as configs padrões
-
-# Definindo a rota principal da aplicação
 def init_app(app):
-    players = ['Yan', 'Ferrari', 'Valéria', 'Amanda']
-    gamelist = [
-        {'Título': 'Tarisland', 'Ano': 2022, 'Categoria': 'MMORPG'}
-    ]
-
+    # lista 
+    # a lista veio pra cá pq dentro da função ela era reiniciada a cada requisição
+    players = ['Giovana', 'Amanda', 'Igor', 'Diego']
+    gamelist = [{'Título': 'CS 1.6', 'Ano': 1996, 'Categoria': 'FPS Online'}]
+    
+    
+    # definindo a rota principal da aplicação '/'
     @app.route('/')
-    def home(): # Função que será executada ao acessar a rota
+    # toda rota precisa de um função para executar 
+    def home():
         return render_template('index.html')
 
 
+    # definindo a rota principal da aplicação '/'
     @app.route('/games', methods=['GET', 'POST'])
+    # toda rota precisa de um função para executar 
     def games():
+        # essas variáveis estariam vindo de fora 
         title = 'Tarisland'
         year = 2022
         category = 'MMORPG'
-        # players = ['Yan', 'Ferrari', 'Valéria', 'Amanda'] mudando para o escopo global para ela adicionar e nao reiniciar
-        console = {'name': 'Playstation',
-                'manufacture': 'Sony',
-                'year': 2020}
+        # dicionário 
+        console = {'Nome' : 'PS5', 'Fabricante': 'Sony', 'Ano': 2020}
         
-        # tratando uma requisicao POST com request
+        # tratando uma requisição POST com request
         if request.method == 'POST':
-            # coletando o texto da input
+            # coletando o texto da input 
+            # player é o nome da caixinha que eu criei no form
             if request.form.get('player'):
                 players.append(request.form.get('player'))
+                return redirect(url_for('games'))
         
-        return render_template('games.html', 
-                            title = title,
-                            year = year,
-                            category = category,
-                            players = players,
-                            console = console)
-
+        # o primeiro title é a var que vai ser criada na página 
+        return render_template('games.html', title=title, year=year, category=category, players=players, console=console)
+    
+    
     @app.route('/newGame', methods=['GET', 'POST'])
     def newGame():
-        
         if request.method == 'POST':
             if request.form.get('title') and request.form.get('year') and request.form.get('category'):
-                gamelist.append({'Título':request.form.get('title'), 'Ano': request.form.get('year'), 'Categoria': request.form.get('category')})
+                gamelist.append({'Título': request.form.get('title'), 'Ano': request.form.get('year'), 'Categoria' : request.form.get('category')})
+                return redirect(url_for('newGame'))
                 
         return render_template('newGame.html', gamelist=gamelist)
-
-
-
