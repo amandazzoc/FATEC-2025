@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Biblioteca pessoal</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <nav class="">
+      <ul class="nav-list flex justify-center gap-10 p-2 bg-blue-200">
+        <li class="px-6 py-2 rounded-xl hover:bg-white transition-colors font-bold text-gray-700"><a href="{{ url_for('home') }}">Home</a></li>
+  <li class="px-6 py-2 rounded-xl hover:bg-white transition-colors font-bold text-gray-700"><a href="{{ url_for('wish_list_view') }}">Lista para ler</a></li>
+        <li class="px-6 py-2 rounded-xl hover:bg-white transition-colors font-bold text-gray-700"><a href="{{ url_for('read_books') }}">Avaliação de livros</a></li>
+      </ul>
+    </nav>
+    <hr />
+    {% block content %}
+    <!-- Aqui irá o conteúdo das outras páginas -->
+    {% endblock %}
+    <footer class="bg-blue-200 p-4 justify-center text-center fixed bottom-0 left-0 w-full">
+      <p class="text-gray-700">Todos os direitos resevados &reg;</p>
+    </footer>
+  </body>
+</html>
