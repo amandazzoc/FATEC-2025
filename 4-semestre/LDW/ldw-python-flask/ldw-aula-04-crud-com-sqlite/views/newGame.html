@@ -1,0 +1,32 @@
+{%extends 'base.html'%}
+{% block content %}
+    <h1>Cadastro de jogos</h1>
+    <hr>
+    <form action="{{url_for('newGame')}}" method="POST">
+        <Label>Título:</Label>
+        <input type="text" name="title">
+        <Label>Ano:</Label>
+        <input type="text" name="year">
+        <Label>Categoria:</Label>
+        <input type="text" name="category">
+        <input type="submit" value="Cadastrar">
+        <br>
+        <hr>
+    </form>
+    <hr>
+    <h2>Jogos cadastrados:</h2>
+    <table border="1">
+        <tr>
+            <th>Título</th>
+            <th>Ano</th>
+            <th>Categoria</th>
+        </tr>
+        {% for game in gamelist %}
+            <tr>
+                <td>{{game.Título}} </td>
+                <td>{{game.Ano}} </td>
+                <td>{{game.Categoria}} </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}
