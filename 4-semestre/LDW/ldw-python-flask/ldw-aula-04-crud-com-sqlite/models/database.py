@@ -10,7 +10,7 @@ class Game(db.Model):
     category = db.Column(db.String(150))
     platform = db.Column(db.String(150))
     price = db.Column(db.Float)
-    quatity = db.Column(db.Integer)
+    quantity = db.Column(db.Integer)
     
     # Método construtor da classe
     def __init__(self, title, year, category, platform, price, quantity):
@@ -19,4 +19,4 @@ class Game(db.Model):
         self.category = category
         self.platform = platform
         self.price = price
-        self.quatity = quantity
+        self.quantity = quantity

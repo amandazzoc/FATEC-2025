@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import urllib # envia requisições
 import json # conversão de dados json
+from models.database import Game, db
 
 def init_app(app):
     # lista 
@@ -71,3 +72,27 @@ def init_app(app):
             else: return f'Game com a id {id} não foi encontrado.'
         else: 
             return render_template('apigames.html', gameList=gameList)
+        
+    @app.route('/estoque', methods=['GET', 'POST'])
+    @app.route('/estoque/delete/<int:id>', methods=['POST'])
+    def estoque(id=None):
+        # Verifica se o ID foi passado para deletar o jogo
+        if id:
+            game = Game.query.get(id)
+            
+            db.session.delete(game)
+            db.session.commit()
+            return redirect(url_for('estoque'))
+        
+        if request.method == 'POST':
+            # Realiza o cadastro do jogo
+            newGame = Game(request.form['title'], request.form['year'], request.form['category'], request.form['platform'], float(request.form['price']), int(request.form['quantity']))
+            
+            # Adiciona o novo jogo na sessão do banco
+            db.session.add(newGame)
+            # Confirma a adição no banco
+            db.session.commit()
+        
+        # Busca todos os jogos no banco de dados
+        gameEstoque = Game.query.all()
+        return render_template('estoque.html', gameEstoque=gameEstoque)
