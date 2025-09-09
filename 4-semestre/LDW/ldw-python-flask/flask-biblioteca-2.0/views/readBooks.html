@@ -1,0 +1,118 @@
+{% extends 'base.html' %} {% block content %}
+<div class="flex gap-20 items-center justify-center min-h-[calc(100vh-70px)]">
+  <div class="p-14 border-2 border-gray-100 rounded-lg shadow-lg bg-white">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-4xl font-bold !text-gray-800">Livros Avaliados</h1>
+      <button
+        id="showFormBtn"
+        class="ml-4 px-4 py-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition"
+      >
+        + Avaliação
+      </button>
+    </div>
+    <p class="text-lg !text-gray-600">
+      Aqui você pode gerenciar sua lista de livros que já leu.
+    </p>
+
+    <form
+      id="addEvaluationForm"
+      class="mt-6 mb-6 hidden"
+      method="POST"
+      action="{{ url_for('read_books') }}"
+    >
+      <div class="flex gap-4 flex-wrap">
+        <input
+          type="text"
+          name="title"
+          placeholder="Título"
+          required
+          class="border px-3 py-2 rounded"
+        />
+        <input
+          type="number"
+          name="pages"
+          placeholder="Páginas"
+          required
+          class="border px-3 py-2 rounded"
+        />
+        <input
+          type="date"
+          name="startDate"
+          required
+          class="border px-3 py-2 rounded"
+        />
+        <input
+          type="date"
+          name="endDate"
+          required
+          class="border px-3 py-2 rounded"
+        />
+        <input
+          type="number"
+          name="evaluation"
+          min="1"
+          max="5"
+          placeholder="(1-5)"
+          required
+          class="border px-3 py-2 rounded"
+        />
+        <button
+          type="submit"
+          class="bg-green-400 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition"
+        >
+          Salvar
+        </button>
+      </div>
+    </form>
+
+    <table class="min-w-full divide-y divide-gray-200 mt-6">
+      <thead class="bg-gray-50">
+        <tr>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Título
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Páginas
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Data de Início
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Data de Término
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Avaliação
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        {% for book in readBooks %}
+        <tr>
+          <td class="px-6 py-4 whitespace-nowrap">{{ book.title }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">{{ book.pages }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">{{ book.startDate }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">{{ book.endDate }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">{{ book.evaluation }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/readbooks.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %} {% block content %}
+<div class="flex gap-20 items-center justify-center min-h-[calc(100vh-70px)]">
+  <div class="p-14 border-2 border-gray-100 rounded-lg shadow-lg bg-white">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-4xl font-bold !text-gray-800">Estante de livros</h1>
+    </div>
+    <p class="text-lg !text-gray-600">
+      Aqui você pode encontrar seus livros lidos e não lidos (Sua estante
+      completa :D).
+    </p>
+
+    <table class="min-w-full divide-y divide-gray-200 mt-6">
+      <thead class="bg-gray-50">
+        <tr>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Imagem
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Título
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Sinopse
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Autor
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Páginas
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Estante
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        {% for book in bookList %}
+        <tr>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <img src="{{ book.edition.cover }}" alt="Capa do livro" class="h-20 w-auto object-cover"/>
+        </td>
+          <td class="px-6 py-4 whitespace-nowrap">{{ book.edition.title }}</td>
+          <td class="px-6 py-4 whitespace-nowrap max-w-xs overflow-hidden text-ellipsis">
+            {{ book.edition.synopsis[:150] }}{% if book.edition.synopsis|length > 150 %}...{% endif %}
+          </td>          
+          <td class="px-6 py-4 whitespace-nowrap">{{ book.edition.author }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">{{ book.edition.pages }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span
+              class="px-2 py-1 rounded
+                {% if book.type == 1 %}bg-green-500 text-white
+                {% elif book.type == 2 %}bg-yellow-400 text-black
+                {% elif book.type == 3 %}bg-blue-500 text-white
+                {% elif book.type == 4 %}bg-red-500 text-white
+                {% elif book.type == 5 %}bg-black text-white
+                {% endif %}"
+            >
+              {{ book.type_text }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/getBookType.js') }}"></script>
+{% endblock %}
