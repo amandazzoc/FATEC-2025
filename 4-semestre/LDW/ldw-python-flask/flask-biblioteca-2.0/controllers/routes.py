@@ -52,14 +52,26 @@ def init_app(app):
     
     
     @app.route('/estante', methods=['GET', 'POST'])
-    def estante():
+    @app.route('/estante/<int:id>', methods=['GET', 'POST'])
+    def estante(id=None):
         url = 'https://skoob-api.onrender.com/api/users/8564121/bookshelf'
         response = urllib.request.urlopen(url)
         data = response.read()
         data = data.decode('utf-8')
         bookList = json.loads(data)
+        
+        if id:
+            bookInfo = []
+            for book in bookList:
+                if book['edition']['id'] == id:
+                    bookInfo = book
+                    break
+            if bookInfo:
+                return render_template('book_detail.html', bookInfo=bookInfo)
+            else:
+                return "Livro não encontrado", 404
+        else:
+            for book in bookList:
+                book['type_text'] = get_book_type_text(book['type'])
 
-        for book in bookList:
-            book['type_text'] = get_book_type_text(book['type'])
-
-        return render_template('estante.html', bookList=bookList)
+            return render_template('estante.html', bookList=bookList)
