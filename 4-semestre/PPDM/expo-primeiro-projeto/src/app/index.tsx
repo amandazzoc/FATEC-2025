@@ -22,9 +22,16 @@ export default function Index() {
                     WebBrowser.openBrowserAsync("https://github.com/i-davies");
                 }
                 }/> */}
-                
-                <Card title="Primeiro Card" body="Corpo do Card" href={"/buttons"}></Card>
 
+                <Card title="Botões" body="Demonstração de Botões" href={"/buttons"}></Card>
+
+                <Card title="FlatList" body="Demonstração de FlatList" href={"/flatlist-example"}></Card>
+
+                <Card title="FlatList + Fetch" body="Demonstração de FlatList com Fetch" href={"/flatlist-fetch"}></Card>
+
+                <Card title="FlashList + Fetch" body="Demonstração de FlashList com Fetch" href={"/flashlist"}></Card>
+
+                <Card title="Inputs" body="Demonstração de Inputs" href={"/inputs"}></Card>
             </View>
         </ScrollView>
     )

@@ -21,7 +21,7 @@ export default function Buttons() {
                 <Text>Pressione-me também</Text>
             </Pressable>
 
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity onPress={() => router.push('/')}>
                 <Text style={styles.backLink}>Voltar</Text>
             </TouchableOpacity>
         </View>
