@@ -78,10 +78,12 @@ def init_app(app):
                 db.session.add(avaliacao)
                 db.session.commit()
                 return redirect(url_for('read_books'))
-        # Listar avaliações
-        avaliacoes = Avaliacao.query.all()
+        # Listar avaliações com paginação
+        page = request.args.get('page', 1, type=int)
+        per_page = 5
+        avaliacoes_page = Avaliacao.query.paginate(page=page, per_page=per_page)
         readBooks = []
-        for a in avaliacoes:
+        for a in avaliacoes_page.items:
             readBooks.append({
                 'id': a.id,
                 'title': a.livro.titulo if a.livro else '',
@@ -91,7 +93,7 @@ def init_app(app):
                 'evaluation': a.nota
             })
         livros = Livro.query.all()
-        return render_template('readBooks.html', readBooks=readBooks, livros=livros)
+        return render_template('readBooks.html', readBooks=readBooks, livros=livros, avaliacoes_page=avaliacoes_page)
 
     @app.route('/readBooks/edit/<int:id>', methods=['GET', 'POST'])
     def edit_avaliacao(id):
