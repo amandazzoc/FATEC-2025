@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block content %}
+<div class="flex gap-20 items-center justify-center min-h-[calc(100vh-70px)]">
+  <div class="p-14 border-2 border-gray-100 rounded-lg shadow-lg bg-white">
+    <div class="flex flex-col items-center justify-between mb-4">
+      <h1 class="text-4xl font-bold !text-gray-800">{{bookInfo.edition.title}}</h1>
+      <div class="w-full flex justify-between">
+          <p class="text-lg !text-gray-600">Autor: {{bookInfo.edition.author}}</p>
+          <p class="text-lg !text-gray-600">Páginas: {{bookInfo.edition.pages}}</p>
+      </div>
+        <img src="{{bookInfo.edition.cover}}" alt="Capa do livro" class="mt-4 w-48 h-auto rounded">
+    </div>
+    <p class="text-lg !text-gray-600">
+      {{bookInfo.edition.synopsis}}
+    </p>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/getBookType.js') }}"></script>
+{% endblock %}

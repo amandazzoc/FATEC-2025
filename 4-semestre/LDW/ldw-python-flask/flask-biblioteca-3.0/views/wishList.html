@@ -1,0 +1,223 @@
+{% extends 'base.html' %} {% block content %}
+<div class="flex gap-20 items-center justify-center min-h-[calc(100vh-70px)]">
+  <div
+    class="max-w-2xl mx-auto p-10 border border-gray-100 rounded-2xl shadow-xl bg-gradient-to-b from-white to-gray-50"
+  >
+    <h1 class="text-4xl font-extrabold mb-2 text-center text-gray-800">
+      📚 Lista de Desejos
+    </h1>
+    <p class="text-lg text-center text-gray-600 mb-8">
+      Gerencie aqui os livros que você deseja ler e acompanhe seu progresso.
+    </p>
+
+    <ul class="space-y-3">
+      {% for livro in livros_page.items %}
+      <li
+        class="flex items-center justify-between border border-gray-200 rounded-xl p-4 hover:bg-gray-50 transition-all duration-200 shadow-sm hover:shadow-md"
+      >
+        <div class="flex items-center">
+          <input
+            type="checkbox"
+            id="livro-{{ loop.index }}"
+            class="mr-3 h-5 w-5 accent-indigo-600 cursor-pointer"
+            onchange="toggleStrike(this, 'label-{{ loop.index }}')"
+          />
+          <label
+            id="label-{{ loop.index }}"
+            for="livro-{{ loop.index }}"
+            class="text-lg font-semibold text-gray-800 cursor-pointer select-none"
+          >
+            {{ livro.titulo }}
+          </label>
+        </div>
+
+        <!-- Botões Editar e Excluir -->
+        <div class="flex gap-2">
+          <!-- Botão Editar -->
+          <button
+            type="button"
+            class="p-2 text-blue-500 hover:text-blue-600 hover:bg-blue-100 rounded-full transition-all duration-200"
+            title="Editar livro"
+            onclick='openEditModal({{ livro.id }}, "{{ livro.titulo|escape }}")'
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.8"
+              stroke="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M16.862 4.487a2.1 2.1 0 1 1 2.97 2.97L7.5 19.79l-4 1 1-4 13.362-13.303z"
+              />
+            </svg>
+          </button>
+          <!-- Botão Excluir -->
+          <form
+            onsubmit='event.preventDefault(); openModal("{{ url_for("wish_list_delete", id=livro.id) }}");'
+          >
+            <button
+              type="submit"
+              class="p-2 text-red-500 hover:text-red-600 hover:bg-red-100 rounded-full transition-all duration-200"
+              title="Excluir livro"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.8"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 7h12M9 7V4h6v3m2 0v13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7h12z"
+                />
+              </svg>
+            </button>
+          </form>
+        </div>
+        <!-- Modal de Edição -->
+        <div
+          id="editModal"
+          class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden"
+        >
+          <div
+            class="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center"
+          >
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Editar Livro</h2>
+            <form id="editForm" method="POST">
+              <input
+                type="text"
+                name="titulo"
+                id="editTitulo"
+                class="border border-gray-300 rounded-lg p-3 w-full mb-6"
+                required
+              />
+              <div class="flex justify-center gap-4">
+                <button
+                  type="button"
+                  onclick="closeEditModal()"
+                  class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  class="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold transition"
+                >
+                  Salvar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </li>
+      {% else %}
+      <p class="text-center text-gray-500 italic mt-6">
+        Nenhum livro adicionado ainda 😔
+      </p>
+      {% endfor %}
+    </ul>
+
+    <!-- Paginação -->
+    <div class="flex justify-center items-center mt-8 gap-3">
+      {% if livros_page.has_prev %}
+      <a
+        href="{{ url_for('wish_list_view', page=livros_page.prev_num) }}"
+        class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
+        >&laquo; Anterior</a
+      >
+      {% endif %}
+
+      <span class="text-gray-600 font-semibold"
+        >Página {{ livros_page.page }} de {{ livros_page.pages }}</span
+      >
+
+      {% if livros_page.has_next %}
+      <a
+        href="{{ url_for('wish_list_view', page=livros_page.next_num) }}"
+        class="px-4 py-2 rounded-lg bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition"
+        >Próximo &raquo;</a
+      >
+      {% endif %}
+    </div>
+  </div>
+
+  <div
+    class="w-full max-w-md p-8 border border-gray-200 rounded-2xl shadow-lg bg-white"
+  >
+    <h2 class="text-3xl font-bold mb-4 text-gray-800 text-center">
+      ➕ Adicionar Livro
+    </h2>
+    <p class="text-lg text-center text-gray-600 mb-6">
+      Adicione um novo livro à sua lista de desejos.
+    </p>
+    <form
+      action="{{ url_for('wish_list_view') }}"
+      method="POST"
+      class="space-y-4"
+    >
+      <input
+        type="text"
+        name="book"
+        placeholder="Título do Livro"
+        class="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+        required
+      />
+      <button
+        type="submit"
+        class="w-full bg-indigo-500 text-white font-semibold rounded-lg py-3 hover:bg-indigo-600 transition-all duration-200"
+      >
+        Adicionar Livro
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de Exclusão -->
+<div
+  id="deleteModal"
+  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden"
+>
+  <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center">
+    <h2 class="text-2xl font-bold text-gray-800 mb-2">Excluir Livro</h2>
+    <p class="text-gray-600 mb-6">
+      Tem certeza que deseja excluir este livro da sua lista?
+    </p>
+
+    <div class="flex justify-center gap-4">
+      <button
+        onclick="closeModal()"
+        class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition"
+      >
+        Cancelar
+      </button>
+      <form id="deleteForm" method="POST">
+        <button
+          type="submit"
+          class="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-semibold transition"
+        >
+          Excluir
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openEditModal(id, titulo) {
+    document.getElementById("editModal").classList.remove("hidden");
+    document.getElementById("editTitulo").value = titulo;
+    document.getElementById("editForm").action = `/wishList/edit/${id}`;
+  }
+  function closeEditModal() {
+    document.getElementById("editModal").classList.add("hidden");
+  }
+</script>
+<script src="{{ url_for('static', filename='js/wishlist.js') }}"></script>
+{% endblock %}
