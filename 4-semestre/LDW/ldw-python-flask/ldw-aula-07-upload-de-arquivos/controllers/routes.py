@@ -1,5 +1,7 @@
+import os
+import uuid
 from flask import render_template, request, url_for, redirect, flash, session
-from models.database import db, Game, Console, Usuario
+from models.database import db, Game, Console, Usuario, Imagem
 from werkzeug.security import generate_password_hash, check_password_hash
 import urllib
 import json
@@ -204,3 +206,36 @@ def init_app(app):
                 flash('Registro realizado com sucesso! Faça o login.', 'success')
                 return redirect(url_for('login'))
         return render_template('caduser.html')
+    
+    # Definindo tipos de arquivos permitidos
+    FILE_TYPES = set(['png', 'jpg', 'jpeg', 'gif'])
+    def arquivos_permitidos(filename):
+        # O split corta da esquerda para a direita -> imagem|.png
+        # O rsplit corta da direita para a esquerda imagem|.png <-
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in FILE_TYPES
+    
+    
+    @app.route('/galeria', methods=['GET', 'POST'])
+    def galeria():
+        if request.method == 'POST':
+            # Captura o arquivo vindo do formulário
+            file = request.files['file']
+            # Enviando o nome do arquivo para a função para verificar se o tipo de arquivo é permitido
+            if not arquivos_permitidos(file.filename):
+                # Se o arquivo não for permitido
+                flash('Utilize somente os tipos de arquivos de imagens (png, jpg, jpeg e gif)', 'danger')
+                return redirect(request.url)
+            else:
+                # Se o arquivo for permitido
+                # Definindo um nome aleatório para o arquivo
+                filename = str(uuid.uuid4())
+                # Gravando o nome do arquivo no banco de dados
+                image = Imagem(filename=filename)
+                db.session.add(image)
+                db.session.commit()
+                # Salvando o arquivo
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                flash('Imagem enviada com sucesso!', 'success')
+                return redirect(url_for('galeria'))
+
+        return render_template('galeria.html')
